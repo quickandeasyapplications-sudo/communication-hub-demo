@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick and Easy Tech - Communication Hub Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="assets/logo.png" alt="Quick and Easy Tech Logo" class="logo">
+                <h1>Communication Hub</h1>
+            </div>
+            
+            <nav class="platform-nav">
+                <h2>Platforms</h2>
+                <ul>
+                    <li class="active" data-platform="all">
+                        <i class="fas fa-inbox"></i>
+                        <span>All Messages</span>
+                        <span class="badge">12</span>
+                    </li>
+                    <li data-platform="whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                        <span class="badge">4</span>
+                    </li>
+                    <li data-platform="telegram">
+                        <i class="fab fa-telegram"></i>
+                        <span>Telegram</span>
+                        <span class="badge">3</span>
+                    </li>
+                    <li data-platform="slack">
+                        <i class="fab fa-slack"></i>
+                        <span>Slack</span>
+                        <span class="badge">2</span>
+                    </li>
+                    <li data-platform="discord">
+                        <i class="fab fa-discord"></i>
+                        <span>Discord</span>
+                        <span class="badge">1</span>
+                    </li>
+                    <li data-platform="teams">
+                        <i class="fab fa-microsoft"></i>
+                        <span>Teams</span>
+                        <span class="badge">2</span>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-section">
+                <h2>Analytics</h2>
+                <div class="analytics-preview">
+                    <div class="chart-placeholder">
+                        <canvas id="messageChart"></canvas>
+                    </div>
+                    <p>Message volume by platform</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h2>Tasks</h2>
+                <div class="task-list">
+                    <div class="task-item">
+                        <input type="checkbox" id="task1">
+                        <label for="task1">Send project proposal</label>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" id="task2">
+                        <label for="task2">Schedule client meeting</label>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" id="task3" checked>
+                        <label for="task3">Review contract terms</label>
+                    </div>
+                </div>
+                <button class="view-all-btn">View All Tasks</button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search across all platforms...">
+                    <button class="filter-btn">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                </div>
+                <div class="user-profile">
+                    <span>John Smith</span>
+                    <div class="avatar">JS</div>
+                </div>
+            </div>
+            
+            <!-- Chat List -->
+            <div class="chat-list-container">
+                <h2>Recent Conversations</h2>
+                <div class="chat-list">
+                    <div class="chat-item active" data-platform="whatsapp">
+                        <div class="chat-avatar">
+                            <span>AC</span>
+                            <span class="platform-indicator whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                            </span>
+                        </div>
+                        <div class="chat-details">
+                            <div class="chat-header">
+                                <h3>Alex Chen</h3>
+                                <span class="chat-time">10:45 AM</span>
+                            </div>
+                            <p class="chat-preview">I've reviewed the proposal and have some feedback...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-item" data-platform="telegram">
+                        <div class="chat-avatar">
+                            <span>SJ</span>
+                            <span class="platform-indicator telegram">
+                                <i class="fab fa-telegram"></i>
+                            </span>
+                        </div>
+                        <div class="chat-details">
+                            <div class="chat-header">
+                                <h3>Sarah Johnson</h3>
+                                <span class="chat-time">9:30 AM</span>
+                            </div>
+                            <p class="chat-preview">Can we schedule a call to discuss the project timeline?</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-item" data-platform="slack">
+                        <div class="chat-avatar">
+                            <span>DT</span>
+                            <span class="platform-indicator slack">
+                                <i class="fab fa-slack"></i>
+                            </span>
+                        </div>
+                        <div class="chat-details">
+                            <div class="chat-header">
+                                <h3>Dev Team</h3>
+                                <span class="chat-time">Yesterday</span>
+                            </div>
+                            <p class="chat-preview">The latest build is ready for testing. Please review when...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-item" data-platform="teams">
+                        <div class="chat-avatar">
+                            <span>MP</span>
+                            <span class="platform-indicator teams">
+                                <i class="fab fa-microsoft"></i>
+                            </span>
+                        </div>
+                        <div class="chat-details">
+                            <div class="chat-header">
+                                <h3>Marketing Project</h3>
+                                <span class="chat-time">Yesterday</span>
+                            </div>
+                            <p class="chat-preview">Meeting notes from yesterday's brainstorming session...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-item" data-platform="discord">
+                        <div class="chat-avatar">
+                            <span>TG</span>
+                            <span class="platform-indicator discord">
+                                <i class="fab fa-discord"></i>
+                            </span>
+                        </div>
+                        <div class="chat-details">
+                            <div class="chat-header">
+                                <h3>Tech Guild</h3>
+                                <span class="chat-time">2 days ago</span>
+                            </div>
+                            <p class="chat-preview">Anyone have experience with the new API integration?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Message Area -->
+            <div class="message-area">
+                <div class="message-header">
+                    <div class="contact-info">
+                        <div class="chat-avatar">
+                            <span>AC</span>
+                            <span class="platform-indicator whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h3>Alex Chen</h3>
+                            <p>Online now</p>
+                        </div>
+                    </div>
+                    <div class="message-actions">
+                        <button><i class="fas fa-phone"></i></button>
+                        <button><i class="fas fa-video"></i></button>
+                        <button><i class="fas fa-ellipsis-v"></i></button>
+                    </div>
+                </div>
+                
+                <div class="messages-container">
+                    <div class="date-divider">
+                        <span>Today</span>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-content">
+                            <p>Hi John, I hope you're doing well. I wanted to discuss the project proposal you sent over yesterday.</p>
+                            <span class="message-time">9:30 AM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-content">
+                            <p>Good morning Alex! Sure, I'd be happy to discuss it. What aspects would you like to focus on?</p>
+                            <span class="message-time">9:32 AM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-content">
+                            <p>I've reviewed the proposal and have some feedback on the timeline and budget sections. I think we might need to adjust the delivery schedule to accommodate our Q3 planning.</p>
+                            <span class="message-time">9:45 AM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-content">
+                            <p>Also, could you provide more detail on the implementation phase? I want to make sure we have the right resources allocated.</p>
+                            <span class="message-time">9:47 AM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-content">
+                            <p>I understand your concerns about the timeline. We can definitely adjust it to better align with your Q3 planning. Regarding the implementation phase, I can provide a more detailed breakdown of the resources required and the specific milestones.</p>
+                            <span class="message-time">10:15 AM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-content">
+                            <p>Would you like me to send over a revised proposal with these adjustments by the end of the day?</p>
+                            <span class="message-time">10:16 AM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="message received">
+                        <div class="message-content">
+                            <p>That would be perfect. If you could get it to me by EOD, we can review it in tomorrow's team meeting.</p>
+                            <span class="message-time">10:45 AM</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-features">
+                    <div class="sentiment-indicator">
+                        <div class="sentiment-label">Conversation Sentiment:</div>
+                        <div class="sentiment-value positive">
+                            <i class="fas fa-smile"></i> Positive
+                        </div>
+                    </div>
+                    
+                    <div class="smart-replies">
+                        <div class="smart-reply-label">Smart Replies:</div>
+                        <div class="smart-reply-options">
+                            <button>I'll send the revised proposal by 5 PM today.</button>
+                            <button>Would you like to schedule a quick call to discuss the details?</button>
+                            <button>Is there anything specific about the implementation you'd like me to focus on?</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="message-input-container">
+                    <button class="attachment-btn">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <div class="message-input">
+                        <input type="text" placeholder="Type a message...">
+                    </div>
+                    <button class="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="sidebar-section">
+                <h2>Workflow Actions</h2>
+                <div class="workflow-actions">
+                    <button class="workflow-btn">
+                        <i class="fas fa-tasks"></i>
+                        <span>Convert to Task</span>
+                    </button>
+                    <button class="workflow-btn">
+                        <i class="fas fa-calendar"></i>
+                        <span>Schedule Meeting</span>
+                    </button>
+                    <button class="workflow-btn">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Create Document</span>
+                    </button>
+                    <button class="workflow-btn">
+                        <i class="fas fa-share"></i>
+                        <span>Share Conversation</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h2>Contact Details</h2>
+                <div class="contact-details">
+                    <div class="detail-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>alex.chen@example.com</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-building"></i>
+                        <span>TechSolutions Inc.</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-user-tag"></i>
+                        <span>Client</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h2>Shared Files</h2>
+                <div class="shared-files">
+                    <div class="file-item">
+                        <i class="fas fa-file-pdf"></i>
+                        <div class="file-details">
+                            <span class="file-name">Project_Proposal_v1.pdf</span>
+                            <span class="file-date">Yesterday</span>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-file-excel"></i>
+                        <div class="file-details">
+                            <span class="file-name">Budget_Breakdown.xlsx</span>
+                            <span class="file-date">2 days ago</span>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <i class="fas fa-file-image"></i>
+                        <div class="file-details">
+                            <span class="file-name">Mockup_Design.png</span>
+                            <span class="file-date">1 week ago</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="view-all-btn">View All Files</button>
+            </div>
+        </aside>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
