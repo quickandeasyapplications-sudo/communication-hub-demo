@@ -63,7 +63,21 @@ VITE_OPENAI_API_KEY=your_openai_api_key
 VITE_OPENAI_API_BASE=https://api.openai.com/v1
 ```
 
-4. Start the development server
+### Running the Application
+
+#### 1. Start the Server
+```bash
+cd server
+pnpm start
+```
+The server will run on the port specified in your `.env` file (default: 3001).
+
+#### 2. Start the Client
+```bash
+cd communication-hub
+pnpm run dev
+```
+The client will run on a new port (default: 5173). Open the client URL in two different browsers to test real-time collaboration.
 ```bash
 pnpm run dev
 ```
@@ -74,6 +88,20 @@ pnpm run build
 ```
 
 ## Project Structure
+
+The project now includes two main directories: `communication-hub` (Client) and `server` (Back-end).
+
+```
+.
+├── communication-hub/      # Client (React App)
+│   ├── src/
+│   ├── ...
+│   └── package.json
+└── server/                 # Back-end (Node.js/Socket.io)
+    ├── server.js
+    ├── package.json
+    └── .env.example
+```
 
 ```
 communication-hub/
@@ -124,6 +152,11 @@ The application uses the Quick and Easy Tech branding:
 - **Typography**: Modern, clean font family
 
 ## License
+
+This project is proprietary and confidential. Unauthorized copying, distribution, or use is strictly prohibited.
+
+**For Commercial Deployment:** This license is included for the final commercial package. Please ensure you have the necessary licensing agreements for all third-party dependencies.
+
 
 This project is proprietary and confidential. Unauthorized copying, distribution, or use is strictly prohibited.
 

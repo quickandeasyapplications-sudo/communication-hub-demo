@@ -14,11 +14,6 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    allowedHosts: [
-      'localhost',
-      '127.0.0.1',
-      '5174-ijzz7efysw4cttaw96zls-b20fb1a1.manus.computer',
-      '*.manus.computer'
-    ]
+    allowedHosts: 'all'
   }
 })

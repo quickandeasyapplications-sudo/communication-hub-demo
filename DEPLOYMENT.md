@@ -1,4 +1,4 @@
-# Deployment Guide for Quick and Easy Tech Communication Hub
+# Commercial Deployment Guide for Quick and Easy Tech Communication Hub (Client & Server)
 
 This guide provides detailed instructions for deploying the Communication Hub application in various environments.
 
@@ -15,6 +15,16 @@ This guide provides detailed instructions for deploying the Communication Hub ap
 
 ## Prerequisites
 
+The Communication Hub is now a two-part application: a **Client (React App)** and a **Server (Node.js/Socket.io)**. A commercial deployment requires hosting both components.
+
+Before deploying the Communication Hub, ensure you have:
+
+- Node.js 18.0.0 or higher
+- pnpm 8.0.0 or higher (or npm/yarn)
+- Access to the necessary API keys (OpenAI API key for AI features)
+- **A hosting platform capable of running a persistent Node.js server (e.g., AWS EC2, DigitalOcean Droplet, Heroku, or a specialized PaaS) for the real-time collaboration feature.**
+- A web server or hosting platform for the static client files.
+
 Before deploying the Communication Hub, ensure you have:
 
 - Node.js 18.0.0 or higher
@@ -22,7 +32,44 @@ Before deploying the Communication Hub, ensure you have:
 - Access to the necessary API keys (OpenAI API key for AI features)
 - A web server or hosting platform for production deployment
 
-## Local Deployment
+## Local Development and Testing (Client & Server)
+
+To run the full application locally, you must start both the client and the server.
+
+### 1. Server Setup and Start
+1. Navigate to the `server` directory: `cd server`
+2. Install dependencies: `pnpm install`
+3. Create a `.env` file from `.env.example` and set `CLIENT_URL` to your client's local development URL (e.g., `http://localhost:5173`).
+4. Start the server:
+   ```bash
+   pnpm start
+   ```
+   The server will run on the port specified in your `.env` file (default: 3001).
+
+### 2. Client Setup and Start
+1. Navigate to the `communication-hub` directory: `cd communication-hub`
+2. Install dependencies: `pnpm install`
+3. Create a `.env` file from `.env.example` and set `VITE_OPENAI_API_KEY` and `VITE_API_BASE_URL` (if needed).
+4. **Crucially, set the collaboration server URL:**
+   ```
+   VITE_OPENAI_API_KEY=your_openai_api_key_here
+   VITE_API_BASE_URL=your_api_base_url_if_needed
+   VITE_COLLABORATION_SERVER=http://localhost:3001
+   ```
+5. Start the development server:
+   ```bash
+   pnpm run dev
+   ```
+   The client will typically run on port 5173.
+
+### Production Build (Client Only)
+
+1. Build the client application:
+   ```bash
+   cd communication-hub
+   pnpm run build
+   ```
+2. The static files are in the `dist` folder.
 
 ### Development Environment
 
@@ -63,7 +110,63 @@ Before deploying the Communication Hub, ensure you have:
 
 3. Access the application at `http://localhost:4173`
 
-## Server Deployment
+## Commercial Production Deployment (Client & Server)
+
+Commercial deployment requires hosting the client (static files) and the server (Node.js application) separately.
+
+### 1. Server Deployment (Node.js/Socket.io)
+
+The server must be deployed to a platform that supports persistent Node.js applications (e.g., AWS EC2, Heroku, DigitalOcean).
+
+1. **Build and Configure**:
+   *   Navigate to the `server` directory.
+   *   Ensure all dependencies are installed: `pnpm install`
+   *   **Set Environment Variables**: Configure the `PORT` (e.g., 80 or 443) and, most importantly, set the **`CLIENT_URL`** to the public URL of your deployed client (e.g., `https://app.yourdomain.com`). This is vital for CORS.
+
+2. **Deployment**:
+   *   Deploy the `server` directory contents to your chosen Node.js hosting platform.
+   *   Start the server using `pnpm start` or a process manager like PM2.
+   *   **Record the public URL of the deployed server** (e.g., `https://api.yourdomain.com:3001`).
+
+### 2. Client Deployment (Static Files)
+
+The client is a static application and can be deployed to any static hosting service (Netlify, Vercel, GitHub Pages, Nginx, etc.).
+
+1. **Build the Client**:
+   ```bash
+   cd communication-hub
+   pnpm run build
+   ```
+2. **Configure Client Environment**:
+   *   Before building, ensure the client's production environment variable `VITE_COLLABORATION_SERVER` is set to the public URL of your deployed server (e.g., `https://api.yourdomain.com:3001`).
+   *   If deploying to a GitHub Pages subdirectory, ensure `vite.config.js` has the correct `base` path.
+
+3. **Deploy the `dist` folder**:
+   *   Copy the contents of the `communication-hub/dist` directory to your static hosting platform.
+
+### Traditional Web Server (Apache/Nginx) - Client Only
+
+This section is for the static client files only. The server must be hosted separately.
+
+1. Build the application:
+   ```bash
+   pnpm run build
+   ```
+2. Copy the contents of the `dist` directory to your web server's document root or a subdirectory.
+3. Configure your web server for single-page application routing (as detailed below).
+
+**Apache** (`.htaccess` file in the root directory):
+... (Existing Apache config)
+
+**Nginx** (in your server block):
+... (Existing Nginx config)
+
+### Node.js Server - Client Only (Deprecated for Commercial Use)
+
+This method is not recommended for commercial deployment as it only serves the static files and does not run the real-time server.
+
+1. Install a simple HTTP server:
+... (Existing Node.js Server config)
 
 ### Traditional Web Server (Apache/Nginx)
 
@@ -117,7 +220,59 @@ Before deploying the Communication Hub, ensure you have:
 
 4. Access the application at the URL provided by the serve command.
 
-## Docker Deployment
+## Docker Deployment (Client & Server)
+
+For a unified deployment, a multi-stage Docker setup is recommended.
+
+1. **Create a `Dockerfile`** in the project root (`/communication-hub-final-production/`):
+   ```dockerfile
+   # --- Stage 1: Build Client ---
+   FROM node:20-alpine AS client-build
+   WORKDIR /app/client
+   COPY communication-hub/package.json communication-hub/pnpm-lock.yaml ./
+   RUN npm install -g pnpm && pnpm install --frozen-lockfile
+   COPY communication-hub/. .
+   # Set VITE_COLLABORATION_SERVER to the internal Docker service name (e.g., http://server:3001)
+   ARG VITE_COLLABORATION_SERVER
+   ENV VITE_COLLABORATION_SERVER=$VITE_COLLABORATION_SERVER
+   RUN pnpm run build
+
+   # --- Stage 2: Build Server ---
+   FROM node:20-alpine AS server-build
+   WORKDIR /app/server
+   COPY server/package.json server/pnpm-lock.yaml ./
+   RUN npm install -g pnpm && pnpm install --frozen-lockfile
+   COPY server/. .
+
+   # --- Stage 3: Final Production Image ---
+   FROM nginx:stable-alpine
+   # Copy built client files
+   COPY --from=client-build /app/client/dist /usr/share/nginx/html
+   # Copy built server files
+   COPY --from=server-build /app/server /usr/src/app
+   
+   # Expose ports for Nginx (Client) and Node.js (Server)
+   EXPOSE 80 3001
+   
+   # Use a custom startup script to run both Nginx and Node.js server
+   COPY startup.sh /usr/local/bin/
+   RUN chmod +x /usr/local/bin/startup.sh
+   
+   CMD ["startup.sh"]
+   ```
+
+2. **Create a `startup.sh`** script in the project root:
+   ```bash
+   #!/bin/sh
+   # Start the Node.js server in the background
+   node /usr/src/app/server.js &
+   # Start Nginx in the foreground
+   nginx -g "daemon off;"
+   ```
+
+3. **Use Docker Compose** for easy management and networking.
+
+This is the recommended approach for commercial deployment.
 
 1. Create a `Dockerfile` in the root directory:
    ```dockerfile
@@ -162,7 +317,28 @@ Before deploying the Communication Hub, ensure you have:
 
 5. Access the application at `http://localhost:8080`
 
-## Cloud Deployment
+## Cloud Deployment (PaaS/IaaS)
+
+For commercial use, deploying to a Platform as a Service (PaaS) or Infrastructure as a Service (IaaS) is recommended.
+
+### Vercel/Netlify (Client Only)
+
+These are suitable for the static client only. You will need a separate deployment for the server.
+
+... (Existing Vercel/Netlify config)
+
+### AWS Amplify (Client Only)
+
+... (Existing AWS Amplify config)
+
+### Heroku/DigitalOcean App Platform (Server Recommended)
+
+These platforms are ideal for hosting the Node.js server component.
+
+1. **Deploy Server**: Deploy the `server` directory as a Node.js application.
+2. **Deploy Client**: Deploy the `communication-hub` directory to a static hosting service or a separate build pipeline.
+
+**Crucial Step**: Ensure the `VITE_COLLABORATION_SERVER` variable in the client build is set to the public URL of the deployed server.
 
 ### Netlify
 

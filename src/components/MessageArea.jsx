@@ -4,15 +4,17 @@ import { formatMessageTime, cn, validateMessage } from '../lib/utils';
 import { PLATFORM_CONFIG } from '../lib/types';
 import { Logo } from './Logo';
 import { SmartReplyPanel } from './SmartReplyPanel';
+import { CollaborativePresence } from './CollaborativePresence';
 import { SentimentIndicator, ConversationSentimentTrend } from './SentimentIndicator';
 import { aiService } from '../lib/aiService';
 import { workflowService } from '../lib/workflowService';
 
-export function MessageArea({ chat, messages, onSendMessage }) {
+export function MessageArea({ chat, messages, onSendMessage, collaboration }) {
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showSmartReplies, setShowSmartReplies] = useState(true);
   const [workflowActions, setWorkflowActions] = useState([]);
+  const [typingTimeout, setTypingTimeout] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -80,6 +82,26 @@ export function MessageArea({ chat, messages, onSendMessage }) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage(e);
+    }
+  };
+
+  // Handle typing indicator
+  const handleMessageChange = (e) => {
+    setNewMessage(e.target.value);
+    
+    // Emit typing status
+    if (collaboration && chat) {
+      collaboration.setUserTyping(chat.id, true);
+      
+      // Clear previous timeout
+      if (typingTimeout) clearTimeout(typingTimeout);
+      
+      // Set new timeout to stop typing indicator after 3 seconds of inactivity
+      const timeout = setTimeout(() => {
+        collaboration.setUserTyping(chat.id, false);
+      }, 3000);
+      
+      setTypingTimeout(timeout);
     }
   };
 
@@ -178,6 +200,14 @@ export function MessageArea({ chat, messages, onSendMessage }) {
         </div>
       </div>
 
+      {/* Collaborative Presence Indicator */}
+      {collaboration && (
+        <CollaborativePresence
+          participants={collaboration.participants}
+          typingUsers={collaboration.typingUsers}
+        />
+      )}
+
       {/* Workflow Actions Notification */}
       {workflowActions.length > 0 && (
         <div className="bg-blue-50 border-b border-blue-200 p-2">
@@ -261,7 +291,7 @@ export function MessageArea({ chat, messages, onSendMessage }) {
             <textarea
               ref={inputRef}
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              onChange={handleMessageChange}
               onKeyPress={handleKeyPress}
               placeholder={`Message ${chat.name}...`}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg resize-none qet-input focus:border-[var(--qet-lime)] focus:ring-2 focus:ring-[var(--qet-lime)] focus:ring-opacity-20"

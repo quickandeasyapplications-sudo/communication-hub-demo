@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from './components/ui/resizable';
 import { EnhancedSidebar } from './components/EnhancedSidebar';
 import { ChatList } from './components/ChatList';
@@ -7,6 +7,7 @@ import { SearchBar } from './components/SearchBar';
 import { AnalyticsDashboard } from './components/AnalyticsDashboard';
 import { TaskManager } from './components/TaskManager';
 import { useMockData } from './hooks/useMockData';
+// import { useRealtimeCollaboration } from './hooks/useRealtimeCollaboration'; // Disabled for GitHub Pages static demo
 import { PLATFORMS } from './lib/types';
 import { searchItems, sortChatsByLastMessage } from './lib/utils';
 import './App.css';
@@ -17,6 +18,9 @@ function App() {
   const [selectedChat, setSelectedChat] = useState(null);
   const [selectedView, setSelectedView] = useState('chats');
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Real-time collaboration is disabled for the static GitHub Pages demo.
+  const collaboration = null;
 
   // Filter chats based on platform and search
   const filteredChats = chats.filter(chat => {
@@ -66,6 +70,7 @@ function App() {
               chat={selectedChat}
               messages={chatMessages}
               onSendMessage={handleSendMessage}
+// collaboration={collaboration} // Disabled for GitHub Pages static demo
               />
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -88,6 +93,7 @@ function App() {
               chat={selectedChat}
               messages={chatMessages}
               onSendMessage={handleSendMessage}
+// collaboration={collaboration} // Disabled for GitHub Pages static demo
               />
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -110,6 +116,7 @@ function App() {
               chat={selectedChat}
               messages={chatMessages}
               onSendMessage={handleSendMessage}
+// collaboration={collaboration} // Disabled for GitHub Pages static demo
               />
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -132,6 +139,7 @@ function App() {
               chat={selectedChat}
               messages={chatMessages}
               onSendMessage={handleSendMessage}
+// collaboration={collaboration} // Disabled for GitHub Pages static demo
               />
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -153,6 +161,7 @@ function App() {
               chat={selectedChat}
               messages={chatMessages}
               onSendMessage={handleSendMessage}
+// collaboration={collaboration} // Disabled for GitHub Pages static demo
               />
             </ResizablePanel>
           </ResizablePanelGroup>
